@@ -1,0 +1,110 @@
+#use_cache "/home/szh/opencv-4.8.0/.cache"
+#do_unpack "v0.1.2a.zip" "fa4b3e25167319cb0fa9432ef8281945" "https://github.com/opencv/ade/archive/v0.1.2a.zip" "/home/szh/opencv-4.8.0/build/3rdparty/ade"
+#check_md5 "/home/szh/opencv-4.8.0/.cache/ade/fa4b3e25167319cb0fa9432ef8281945-v0.1.2a.zip"
+#mismatch_md5 "/home/szh/opencv-4.8.0/.cache/ade/fa4b3e25167319cb0fa9432ef8281945-v0.1.2a.zip" "d41d8cd98f00b204e9800998ecf8427e"
+#delete "/home/szh/opencv-4.8.0/.cache/ade/fa4b3e25167319cb0fa9432ef8281945-v0.1.2a.zip"
+#cmake_download "/home/szh/opencv-4.8.0/.cache/ade/fa4b3e25167319cb0fa9432ef8281945-v0.1.2a.zip" "https://github.com/opencv/ade/archive/v0.1.2a.zip"
+#try 1
+#   Trying 20.205.243.166:443...
+# Connected to github.com (20.205.243.166) port 443 (#0)
+# ALPN: offers h2,http/1.1
+# [5 bytes data]
+# TLSv1.3 (OUT), TLS handshake, Client hello (1):
+# [512 bytes data]
+# [5 bytes data]
+# TLSv1.3 (IN), TLS handshake, Server hello (2):
+# [122 bytes data]
+# [5 bytes data]
+# [5 bytes data]
+# [1 bytes data]
+# TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+# [19 bytes data]
+# [5 bytes data]
+# [1 bytes data]
+# TLSv1.3 (IN), TLS handshake, Certificate (11):
+# [2739 bytes data]
+# [5 bytes data]
+# [1 bytes data]
+# TLSv1.3 (IN), TLS handshake, CERT verify (15):
+# [78 bytes data]
+# [5 bytes data]
+# [1 bytes data]
+# TLSv1.3 (IN), TLS handshake, Finished (20):
+# [36 bytes data]
+# [5 bytes data]
+# TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+# [1 bytes data]
+# [5 bytes data]
+# [1 bytes data]
+# TLSv1.3 (OUT), TLS handshake, Finished (20):
+# [36 bytes data]
+# SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256
+# ALPN: server accepted h2
+# Server certificate:
+#  subject: CN=github.com
+#  start date: Mar  6 00:00:00 2026 GMT
+#  expire date: Jun  3 23:59:59 2026 GMT
+#  subjectAltName: host "github.com" matched cert's "github.com"
+#  issuer: C=GB; O=Sectigo Limited; CN=Sectigo Public Server Authentication CA DV E36
+#  SSL certificate verify result: unable to get local issuer certificate (20), continuing anyway.
+# [5 bytes data]
+# [1 bytes data]
+# using HTTP/2
+# h2h3 [:method: GET]
+# h2h3 [:path: /opencv/ade/archive/v0.1.2a.zip]
+# h2h3 [:scheme: https]
+# h2h3 [:authority: github.com]
+# h2h3 [user-agent: curl/7.86.0]
+# h2h3 [accept: */*]
+# Using Stream ID: 1 (easy handle 0x55a6b52c20)
+# [5 bytes data]
+# [1 bytes data]
+# GET /opencv/ade/archive/v0.1.2a.zip HTTP/2
+# Host: github.com
+# user-agent: curl/7.86.0
+# accept: */*
+# 
+# [5 bytes data]
+# [1 bytes data]
+# TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+# [57 bytes data]
+# [5 bytes data]
+# [1 bytes data]
+# TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+# [57 bytes data]
+# old SSL session ID is stale, removing
+# [5 bytes data]
+# [1 bytes data]
+# [5 bytes data]
+# [1 bytes data]
+# [5 bytes data]
+# [1 bytes data]
+# [5 bytes data]
+# [1 bytes data]
+# [5 bytes data]
+# [1 bytes data]
+# HTTP/2 302 
+# date: Sat, 07 Mar 2026 07:04:30 GMT
+# content-type: text/html; charset=utf-8
+# content-length: 0
+# vary: X-PJAX, X-PJAX-Container, Turbo-Visit, Turbo-Frame, X-Requested-With, Sec-Fetch-Site,Accept-Encoding, Accept, X-Requested-With
+# location: https://codeload.github.com/opencv/ade/zip/refs/tags/v0.1.2a
+# cache-control: max-age=0, private
+# strict-transport-security: max-age=31536000; includeSubdomains; preload
+# x-frame-options: deny
+# x-content-type-options: nosniff
+# x-xss-protection: 0
+# referrer-policy: no-referrer-when-downgrade
+# content-security-policy: default-src 'none'; base-uri 'self'; child-src github.githubassets.com github.com/assets-cdn/worker/ github.com/assets/ gist.github.com/assets-cdn/worker/; connect-src 'self' uploads.github.com www.githubstatus.com collector.github.com raw.githubusercontent.com api.github.com github-cloud.s3.amazonaws.com github-production-repository-file-5c1aeb.s3.amazonaws.com github-production-upload-manifest-file-7fdce7.s3.amazonaws.com github-production-user-asset-6210df.s3.amazonaws.com *.rel.tunnels.api.visualstudio.com wss://*.rel.tunnels.api.visualstudio.com github.githubassets.com objects-origin.githubusercontent.com copilot-proxy.githubusercontent.com proxy.individual.githubcopilot.com proxy.business.githubcopilot.com proxy.enterprise.githubcopilot.com *.actions.githubusercontent.com wss://*.actions.githubusercontent.com productionresultssa0.blob.core.windows.net productionresultssa1.blob.core.windows.net productionresultssa2.blob.core.windows.net productionresultssa3.blob.core.windows.net productionresultssa4.blob.core.windows.net productionresultssa5.blob.core.windows.net productionresultssa6.blob.core.windows.net productionresultssa7.blob.core.windows.net productionresultssa8.blob.core.windows.net productionresultssa9.blob.core.windows.net productionresultssa10.blob.core.windows.net productionresultssa11.blob.core.windows.net productionresultssa12.blob.core.windows.net productionresultssa13.blob.core.windows.net productionresultssa14.blob.core.windows.net productionresultssa15.blob.core.windows.net productionresultssa16.blob.core.windows.net productionresultssa17.blob.core.windows.net productionresultssa18.blob.core.windows.net productionresultssa19.blob.core.windows.net github-production-repository-image-32fea6.s3.amazonaws.com github-production-release-asset-2e65be.s3.amazonaws.com insights.github.com wss://alive.github.com wss://alive-staging.github.com api.githubcopilot.com api.individual.githubcopilot.com api.business.githubcopilot.com api.enterprise.githubcopilot.com; font-src github.githubassets.com; form-action 'self' github.com gist.github.com copilot-workspace.githubnext.com objects-origin.githubusercontent.com; frame-ancestors 'none'; frame-src viewscreen.githubusercontent.com notebooks.githubusercontent.com; img-src 'self' data: blob: github.githubassets.com media.githubusercontent.com camo.githubusercontent.com identicons.github.com avatars.githubusercontent.com private-avatars.githubusercontent.com github-cloud.s3.amazonaws.com objects.githubusercontent.com release-assets.githubusercontent.com secured-user-images.githubusercontent.com user-images.githubusercontent.com private-user-images.githubusercontent.com opengraph.githubassets.com marketplace-screenshots.githubusercontent.com copilotprodattachments.blob.core.windows.net/github-production-copilot-attachments/ github-production-user-asset-6210df.s3.amazonaws.com customer-stories-feed.github.com spotlights-feed.github.com objects-origin.githubusercontent.com *.githubusercontent.com; manifest-src 'self'; media-src github.com user-images.githubusercontent.com secured-user-images.githubusercontent.com private-user-images.githubusercontent.com github-production-user-asset-6210df.s3.amazonaws.com gist.github.com github.githubassets.com; script-src github.githubassets.com; style-src 'unsafe-inline' github.githubassets.com; upgrade-insecure-requests; worker-src github.githubassets.com github.com/assets-cdn/worker/ github.com/assets/ gist.github.com/assets-cdn/worker/
+# server: github.com
+# x-github-request-id: EF60:10B12:706438:834AFE:69ABCDFE
+# 
+# [0 bytes data]
+# Connection #0 to host github.com left intact
+# Issue another request to this URL: 'https://codeload.github.com/opencv/ade/zip/refs/tags/v0.1.2a'
+#   Trying 52.68.31.213:443...
+# connect to 52.68.31.213 port 443 failed: Connection timed out
+# Failed to connect to codeload.github.com port 443 after 133708 ms: Couldn't connect to server
+# Closing connection 1
+# 
+
