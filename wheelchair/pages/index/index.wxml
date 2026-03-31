@@ -1,0 +1,44 @@
+<view class="container">
+  <view class="status-card">
+    <view class="status-item">
+      <text class="label">指令：</text>
+      <text class="value">{{Direction_Control}}</text>
+    </view>
+  </view>
+
+  <!-- GPS + 心率 显示 -->
+  <view class="info-card">
+    <view class="info-item">
+      <text>GPS 纬度</text>
+      <text class="info-value">{{gps.lat}}</text>
+    </view>
+    <view class="info-item">
+      <text>GPS 经度</text>
+      <text class="info-value">{{gps.lng}}</text>
+    </view>
+    <view class="info-item">
+      <text>心率</text>
+      <text class="info-value red">{{heartRate}} BPM</text>
+    </view>
+  </view>
+
+  <view class="control-pad">
+    <view class="row">
+      <button class="btn btn-square" bindtap="onForward">UP</button>
+    </view>
+    <view class="row">
+      <button class="btn btn-square" bindtap="onLeft">LEFT</button>
+      <button class="btn btn-square btn-stop" bindtap="onStop">STOP</button>
+      <button class="btn btn-square" bindtap="onRight">RIGHT</button>
+    </view>
+    <view class="row">
+      <button class="btn btn-square" bindtap="onBackward">DOWN</button>
+    </view>
+  </view>
+
+  <view class="speed-row">
+    <button class="btn-speed btn-dec" bindtap="onDecelerate">减速 -</button>
+    <button class="btn-speed btn-acc" bindtap="onAccelerate">加速 +</button>
+  </view>
+
+</view>
