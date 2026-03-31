@@ -67,6 +67,11 @@ def on_message(client, userdata, msg):
             } 
             client.publish(reply_topic, json.dumps(reply_data)) 
             print("✅ 已回复平台 + 已上报属性") 
+            
+            # 发送控制命令到 wheelchair/cmd 主题，与 head_node.py 逻辑一致 
+            if desired_dir in ['F', 'B', 'L', 'R', 'S', 'A', 'D']: 
+                client.publish("wheelchair/cmd", desired_dir) 
+                print(f"✅ 发送控制命令: {desired_dir}") 
     except: 
         pass 
 
