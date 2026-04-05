@@ -1,0 +1,274 @@
+<template>
+  <view class="page-container">
+    <view class="main-body">
+      
+      <view class="vitals-row-container">
+        <view class="vitals-card-mini" v-for="(item, index) in vitalsData" :key="index">
+          <view class="mini-icon-box">
+            <image :src="item.icon" class="svg-mini" mode="aspectFit"></image>
+          </view>
+          <view class="mini-content">
+            <text class="mini-label">{{item.label}}</text>
+            <view class="mini-value-row">
+              <text class="mini-num">{{item.value}}</text>
+              <text class="mini-unit">{{item.unit}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="gear-flex-bar">
+        <view class="gear-info-side">
+          <text class="gear-hint-text">当前档位</text>
+          <text class="gear-dynamic-text">{{gearText}}</text> 
+        </view>
+        <view class="gear-btn-group">
+          <view class="circle-btn light" @click="handleDec">
+            <image src="../../static/mnkccgof-08uls1w.svg" class="svg-minus-sign" mode="aspectFit"></image>
+          </view>
+          <view class="circle-btn dark" @click="handleAcc">
+            <image src="../../static/mnkccgof-e6fek0z.svg" class="svg-plus-sign" mode="aspectFit"></image>
+          </view>
+        </view>
+      </view>
+
+      <view class="wheel-center-wrapper">
+        <view class="wheel-main-disc">
+          <view class="w-node n-up" @click="onForward"><image src="../../static/mnkccgof-g2fxw35.svg" class="v-arr" mode="aspectFit"></image></view>
+          <view class="w-node n-left" @click="onLeft"><image src="../../static/mnkccgof-k89yru9.svg" class="h-arr" mode="aspectFit"></image></view>
+          <view class="w-node n-right" @click="onRight"><image src="../../static/mnkccgof-h0cj7ca.svg" class="h-arr" mode="aspectFit"></image></view>
+          <view class="w-node n-down" @click="onBackward"><image src="../../static/mnkccgof-ebqgk3t.svg" class="v-arr" mode="aspectFit"></image></view>
+          
+          <view class="w-stop-btn" @click="handleStop">
+            <image src="../../static/mnkccgof-w97rmv4.svg" class="stop-icon-svg" mode="aspectFit"></image>
+            <text class="stop-label-text">STOP</text>
+          </view>
+        </view>
+      </view>
+
+    </view>
+  </view>
+</template>
+
+<script setup lang="uts">
+  import { ref, computed, onMounted, onUnmounted } from 'vue'
+  
+  // 数据
+  const Direction_Control = ref('S')
+  const HeartBeat = ref(0)
+  const temperature = ref(0)
+  const Blood_Pressure = ref(0)
+  const isManualOperating = ref(false)
+  
+  // 配置
+  const config = {
+    authorization: "version=2018-10-31&res=products%2FH9At1TTBP4%2Fdevices%2Fclient&et=1900800000&method=md5&sign=CjzWJ2qR1SBv1wEqdS83dw%3D%3D",
+    product_id: "H9At1TTBP4",
+    device_name: "client",
+    setUrl: "https://iot-api.heclouds.com/thingmodel/set-device-property",
+    getUrl: "https://iot-api.heclouds.com/thingmodel/query-device-property?product_id=H9At1TTBP4&device_name=client"
+  }
+  
+  const gearText = computed(() => {
+    if (Direction_Control.value === 'A') return 'ACCELERATE'
+    if (Direction_Control.value === 'D') return 'DECELERATE'
+    return 'Speed Mode'
+  })
+  
+  const statusText = computed(() => {
+    const map = { 'F':'FORWARD','B':'BACKWARD','L':'LEFT','R':'RIGHT','S':'STOP','A':'ACCELERATE','D':'DECELERATE' }
+    return map[Direction_Control.value] || 'STOP'
+  })
+  
+  const vitalsData = computed(() => [
+    { label: 'HEART RATE', value: HeartBeat.value, unit: 'BPM', icon: '../../static/mnkccgof-qz1zy79.svg' },
+    { label: 'SYSTOLIC (高压)', value: Blood_Pressure.value, unit: 'MMHG', icon: '../../static/mnkccgof-8gjncvg.svg' },
+    { label: 'TEMPERATURE', value: temperature.value, unit: '°C', icon: '../../static/mnkccgof-zit3u47.svg' },
+    { label: 'STATUS', value: statusText.value, unit: '', icon: '../../static/mnkccgof-q4f2m1u.svg' }
+  ])
+  
+  const handleAction = (cmd: string) => {
+    isManualOperating.value = true
+    Direction_Control.value = cmd
+    sendDirection(cmd)
+    setTimeout(() => { isManualOperating.value = false }, 1500)
+  }
+  
+  const handleAcc = () => handleAction('A')
+  const handleDec = () => handleAction('D')
+  const handleStop = () => handleAction('S')
+  
+  const onForward = () => handleAction('F')
+  const onBackward = () => handleAction('B')
+  const onLeft = () => handleAction('L')
+  const onRight = () => handleAction('R')
+  
+  const sendDirection = (direction: string) => {
+    uni.request({
+      url: config.setUrl,
+      method: "POST",
+      header: {
+        "authorization": config.authorization,
+        "Content-Type": "application/json"
+      },
+      data: {
+        product_id: config.product_id,
+        device_name: config.device_name,
+        params: {
+          Direction_Control: direction
+        }
+      },
+      success: (res: any) => {
+        console.log("指令下发：", res.data);
+        if (res.data.code === 0) {
+          uni.showToast({ title: "已发送：" + direction, icon: "success" });
+          Direction_Control.value = direction;
+        }
+      },
+      fail: () => uni.showToast({ title: "网络异常", icon: "none" })
+    });
+  }
+  
+  const getDeviceStatus = () => {
+    uni.request({
+      url: config.getUrl,
+      header: { authorization: config.authorization },
+      success: (res: any) => {
+        if (res.data.code === 0) {
+          const list = res.data.data;
+          
+          // 如果用户刚按过键，不更新方向状态，只更新心率等数据
+          if (!isManualOperating.value) {
+            const dir = list.find((i: any) => i.identifier === "Direction_Control");
+            if (dir) Direction_Control.value = dir.value;
+          }
+          
+          // 心跳
+          const heart = list.find((i: any) => i.identifier === "HeartBeat");
+          if (heart) HeartBeat.value = heart.value;
+          
+          // 温度
+          const temp = list.find((i: any) => i.identifier === "temperature");
+          if (temp) temperature.value = temp.value;
+          
+          // 血压
+          const bp = list.find((i: any) => i.identifier === "Blood_Pressure");
+          if (bp) Blood_Pressure.value = bp.value;
+        }
+      },
+      fail: () => console.log("获取设备状态失败")
+    });
+  }
+  
+  let intervalId: number
+  onMounted(() => {
+    getDeviceStatus()
+    intervalId = setInterval(getDeviceStatus, 1000) as unknown as number
+  })
+  onUnmounted(() => clearInterval(intervalId))
+</script>
+
+<style scoped>
+  .page-container { width: 100%; height: 100vh; background-color: #f8fafc; overflow: hidden; }
+  .main-body { padding: 12px; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* 1. 卡片布局修复：强制同行显示 */
+  .vitals-row-container {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .vitals-card-mini {
+    width: 47% !important; /* 微调宽度，预留足够间隙 */
+    background: #fff;
+    border-radius: 18px;
+    padding: 15px 10px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+  }
+  .mini-icon-box { width: 38px; height: 38px; background: #f1f5f9; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
+  .svg-mini { width: 22px; height: 22px; }
+  .mini-label { font-size: 10px; color: #333333; font-weight: normal; margin-bottom: 4px; }
+  .mini-num { font-size: 24px; font-weight: 800; color: #1e293b; line-height: 1.1; }
+  .mini-unit { font-size: 10px; color: #cbd5e1; margin-left: 2px; }
+
+  /* 2. 档位控制 */
+  .gear-flex-bar {
+    width: 100%; margin: 5px 0 15px 0;
+    background: #fff; border-radius: 20px; padding: 18px 20px;
+    display: flex !important; flex-direction: row !important; 
+    align-items: center; justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    box-sizing: border-box;
+  }
+  .gear-info-side { display: flex; flex-direction: column; flex: 1; }
+  .gear-hint-text { font-size: 13px; color: #333333; font-weight: normal; }
+  .gear-dynamic-text { font-size: 22px; font-weight: 900; color: #003DCC; }
+  
+  .gear-btn-group { display: flex; flex-direction: row; gap: 12px; }
+  .circle-btn { width: 52px; height: 52px; border-radius: 15px; display: flex; align-items: center; justify-content: center; }
+  .light { background-color: #f1f5f9; }
+  .dark { background-color: #0f172a; }
+  .svg-minus-sign { width: 16px; height: 2px; }
+  .svg-plus-sign { width: 16px; height: 16px; }
+
+  /* 3. 方向盘 */
+  .wheel-center-wrapper { 
+    width: 100%; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .wheel-main-disc {
+    width: 260px; 
+    height: 260px; 
+    background: #f1f5f9; 
+    border-radius: 50%; 
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .w-node {
+    position: absolute;
+    width: 62px; 
+    height: 62px; 
+    background: #fff; 
+    border-radius: 18px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .n-up { top: 20px; left: 50%; transform: translateX(-50%); }
+  .n-down { bottom: 20px; left: 50%; transform: translateX(-50%); }
+  .n-left { left: 20px; top: 50%; transform: translateY(-50%); }
+  .n-right { right: 20px; top: 50%; transform: translateY(-50%); }
+  .v-arr { width: 13px; height: 9px; }
+  .h-arr { width: 9px; height: 13px; }
+
+  .w-stop-btn {
+    position: absolute;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    width: 90px; 
+    height: 90px;
+    background: #b91c1c; 
+    border-radius: 50%; 
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    box-shadow: 0 8px 20px rgba(185, 28, 28, 0.3);
+  }
+  .stop-icon-svg { width: 20px; height: 20px; margin-bottom: 2px; }
+  .stop-label-text { color: #fff; font-size: 13px; font-weight: 800; }
+</style>
