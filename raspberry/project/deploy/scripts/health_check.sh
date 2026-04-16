@@ -30,7 +30,22 @@ check_network() {
   ping -c 1 -W 2 "${GATEWAY_IP}" >/dev/null 2>&1
 }
 
+restart_service() {
+  if [[ "${EUID}" -eq 0 ]]; then
+    systemctl restart "${SERVICE_NAME}"
+    return
+  fi
+
+  if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
+    sudo -n systemctl restart "${SERVICE_NAME}"
+    return
+  fi
+
+  echo "cannot restart ${SERVICE_NAME}: run as root or grant passwordless sudo for systemctl restart" >&2
+  return 1
+}
+
 if ! check_heartbeat || ! check_network; then
   echo "health check failed, restarting ${SERVICE_NAME}"
-  sudo systemctl restart "${SERVICE_NAME}"
+  restart_service
 fi

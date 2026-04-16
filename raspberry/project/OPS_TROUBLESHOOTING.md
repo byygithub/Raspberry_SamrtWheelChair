@@ -69,7 +69,7 @@ chmod +x deploy/scripts/*.sh
 手动抓现场：
 
 ```bash
-SERVICE_NAME=wheelchair.service ./deploy/scripts/capture_diagnostics.sh
+SERVICE_NAME=wheelchair.service /home/pi/Raspberry_SamrtWheelChair/raspberry/project/deploy/scripts/capture_diagnostics.sh
 ```
 
 ## 6) 本次关键代码修复
