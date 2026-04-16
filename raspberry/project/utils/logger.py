@@ -6,7 +6,8 @@
 
 import logging
 import os
-from config import LOG_LEVEL, LOG_FILE
+from logging.handlers import RotatingFileHandler
+from config import LOG_LEVEL, LOG_FILE, LOG_MAX_BYTES, LOG_BACKUP_COUNT
 
 
 def get_logger(name):
@@ -19,8 +20,13 @@ def get_logger(name):
     if log_dir and not os.path.exists(log_dir):
         os.makedirs(log_dir)
 
-    # 创建文件处理器
-    file_handler = logging.FileHandler(LOG_FILE)
+    # 创建文件处理器（带轮转）
+    file_handler = RotatingFileHandler(
+        LOG_FILE,
+        maxBytes=LOG_MAX_BYTES,
+        backupCount=LOG_BACKUP_COUNT,
+        encoding='utf-8'
+    )
     file_handler.setLevel(getattr(logging, LOG_LEVEL))
 
     # 创建控制台处理器

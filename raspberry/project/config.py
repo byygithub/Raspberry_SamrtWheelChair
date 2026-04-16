@@ -35,3 +35,12 @@ QUEUE_SIZE = int(os.environ.get('QUEUE_SIZE', '100'))
 # 日志配置
 LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
 LOG_FILE = os.environ.get('LOG_FILE', 'app.log')
+LOG_MAX_BYTES = int(os.environ.get('LOG_MAX_BYTES', str(5 * 1024 * 1024)))
+LOG_BACKUP_COUNT = int(os.environ.get('LOG_BACKUP_COUNT', '3'))
+
+# 启动配置
+STARTUP_PROFILE = os.environ.get('STARTUP_PROFILE', 'full')
+
+# 健康检查配置
+HEALTH_HEARTBEAT_FILE = os.environ.get('HEALTH_HEARTBEAT_FILE', '/tmp/wheelchair_heartbeat')
+HEALTH_HEARTBEAT_INTERVAL = int(os.environ.get('HEALTH_HEARTBEAT_INTERVAL', '5'))

@@ -1,0 +1,9 @@
+/var/log/wheelchair/app.log {
+    size 5M
+    rotate 7
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+}

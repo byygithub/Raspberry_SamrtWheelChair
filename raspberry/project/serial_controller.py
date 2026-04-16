@@ -69,7 +69,7 @@ class SerialController:
         while self.running:
             try:
                 # 从消息队列获取控制指令
-                msg = msg_queue.get(block=True, timeout=1)
+                msg = msg_queue.get(MessageType.CONTROL_COMMAND, block=True, timeout=1)
                 if msg and msg.msg_type == MessageType.CONTROL_COMMAND:
                     command = msg.data
                     if isinstance(command, str) and len(command) == 1:

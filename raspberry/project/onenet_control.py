@@ -149,7 +149,7 @@ class OneNetControl:
 
             while self.running:
                 # 从消息队列获取心跳数据
-                msg = msg_queue.get(block=False)
+                msg = msg_queue.get(MessageType.HEARTBEAT_DATA, block=False)
                 if msg and msg.msg_type == MessageType.HEARTBEAT_DATA:
                     # 上报心跳数据到平台
                     self.post_heartbeat_data(client, msg.data)

@@ -1,0 +1,28 @@
+[Unit]
+Description=Raspberry Smart Wheelchair Control Service
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+WorkingDirectory=/home/pi/Raspberry_SamrtWheelChair/raspberry/project
+ExecStartPre=/bin/sleep 5
+ExecStart=/usr/bin/python3 /home/pi/Raspberry_SamrtWheelChair/raspberry/project/start_all.py --profile full
+Restart=always
+RestartSec=5
+User=pi
+Group=pi
+Environment=PYTHONUNBUFFERED=1
+Environment=LOG_LEVEL=WARNING
+Environment=LOG_FILE=/var/log/wheelchair/app.log
+Environment=LOG_MAX_BYTES=5242880
+Environment=LOG_BACKUP_COUNT=5
+Environment=HEALTH_HEARTBEAT_FILE=/tmp/wheelchair_heartbeat
+Environment=HEALTH_HEARTBEAT_INTERVAL=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
