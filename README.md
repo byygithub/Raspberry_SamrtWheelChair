@@ -13,14 +13,55 @@
 ## 🏗️ 系统架构 (System Architecture)
 系统采用模块化分层设计，确保了系统的高内聚与低耦合：
 
-1.  **智能感知层 (Raspberry Pi 4B):**
-    *   **语音引擎：** 基于 `Vosk` 的离线语音识别，集成 `pypinyin` 模糊匹配算法，支持口音兼容。
-    *   **视觉感知：** 使用 `YOLO` 进行环境感知与障碍物检测。
-    *   **网络中枢：** 通过 `MQTT` 协议对接中国移动 `OneNET` 云平台。
-2.  **底层执行层 (STM32):**
-    *   **电机驱动：** 高精度 PWM 闭环控制，确保轮椅行驶平稳。
-3.  **用户交互层 (WeChat Mini-Program / App):**
-    *   基于 `uni-app` 开发，实现跨平台远程监控、状态查看及一键呼叫功能。
+```mermaid
+flowchart TD
+    %% Top-down strict layering
+    subgraph L1[感知层]
+        V[语音识别 Vosk + pypinyin]
+        C[视觉感知 YOLO]
+    end
+
+    subgraph L2[智能决策层（Raspberry Pi）]
+        PI[多模态融合与指令下发]
+    end
+
+    subgraph L3[安全/人工接管层（Manual Override，最高优先级）]
+        JOY[硬件摇杆输入]
+        SAFE[安全逻辑/急停]
+    end
+
+    subgraph L4[执行控制层（STM32）]
+        STM[UART指令解析 + 实时控制]
+    end
+
+    subgraph L5[驱动层]
+        MOTOR[电机驱动]
+    end
+
+    subgraph CLOUD[云交互层（侧边）]
+        ONENET[OneNET云平台]
+        APP[微信小程序 / uni-app]
+    end
+
+    %% strict layered links
+    V --> PI
+    C --> PI
+    PI --> STM
+    STM --> MOTOR
+
+    %% joystick override path
+    JOY --> STM
+    SAFE --> STM
+
+    %% cloud only talks to Pi
+    ONENET <--> PI
+    APP <--> ONENET
+```
+
+1.  **自上而下严格分层：** 感知层 → 智能决策层（Pi）→ 安全/人工接管层 → 执行控制层（STM32）→ 驱动层。
+2.  **保留硬件摇杆控制：** 将硬件摇杆放入“安全/人工接管层”，不与普通感知输入混用。
+3.  **控制优先级规则：** 硬件摇杆（人工）优先级最高；当摇杆有输入时覆盖语音/视觉/云端控制；无摇杆输入时执行 Pi 下发指令。
+4.  **云侧边隔离：** 云平台与小程序仅与 Pi 通信，不直接下发到底层驱动/电机。
 
 ---
 
